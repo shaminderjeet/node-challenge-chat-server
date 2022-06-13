@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 
 const welcomeMessage = {
   id: 0,
@@ -30,9 +30,18 @@ app.get("/", function (request, response) {
 app.get("/messages",function(req,res){
   res.send(JSON.stringify(messages))
 })
-app.post("/meassages",function(req,res){
-  res.send(addMessage())
+app.get("/messages/:id",function(req,res){
+  res.send(messages[req.params.id])
 })
+app.delete("/messages/:id", function(req,res){
+  messages.splice(req.params.id, 1)
+  res.send()
+})
+app.post("/messages",function(req,res){
+addMessage(req.body.from,req.body.text)
+ res.redirect("/messages")
+})
+
 
 app.listen(3000, () => {
    console.log("Listening on port 3000")
